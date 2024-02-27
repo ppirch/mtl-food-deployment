@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  mtl-food-api:
+    build: .
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80", "--reload"] 
+    volumes:
+      - ./app:/app
+    ports:
+      - "80:80"
