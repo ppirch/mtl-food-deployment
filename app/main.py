@@ -55,12 +55,10 @@ def model_predict(img):
         reg_outs = reg_outs.squeeze_(1).item()
         cls_outs = torch.argmax(cls_outs, 1).item()
         label = crop['label'].split()[0]
-        print(label)
         if label.startswith("hospfood"):
             num = label.replace("hospfood", "")
             num = int(num) + 1
             label = f"hospfood{num:03d}"
-        print(label)
         results.append({"regression": reg_outs, "classification": food_map[label]})
     return results
 
