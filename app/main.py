@@ -56,7 +56,7 @@ def model_predict(img):
         cls_outs = torch.argmax(cls_outs, 1).item()
         label = crop['label'].split()[0]
         print(label)
-        if label.endswith("hosp"):
+        if label.startswith("hospfood"):
             food_type, num = label.split("hospfood")
             num = int(num) + 1
             label = f"{food_type}{num:03d}"
