@@ -24,15 +24,15 @@ def img_transforms(img):
     )
     return transform(img)
 
-def calculate_nutrients(results):
+def calculate_nutrients(results: list[dict]) -> list[dict]:
     nutrients = []
     for result in results:
         weight = result['regression']
         food_nutrient = result["classification"]
-        food_name = food_nutrient[0] if food_nutrient[0] is not None else "Unknown"
-        ref_weight = food_nutrient[1] if food_nutrient[1] is not None else 0
-        calories = food_nutrient[2] if food_nutrient[2] is not None else 0
-        protein = food_nutrient[3] if food_nutrient[3] is not None else 0
+        food_name = food_nutrient[0] or "Unknown"
+        ref_weight = food_nutrient[1] or 0
+        calories = food_nutrient[2] or 0
+        protein = food_nutrient[3] or 0
         nutrients.append({
             'food': food_name,
             'calories': calories * weight / ref_weight if ref_weight else 0,
@@ -42,7 +42,7 @@ def calculate_nutrients(results):
     return nutrients
 
 
-def model_predict(img):
+def model_predict(img: Image) -> list[dict]:
     yolo_out = segment_model(img)
     crops = yolo_out.crop(save=False)
     results = []
@@ -83,13 +83,14 @@ def read_root():
 @app.post("/predict")
 async def predict(
         before_image:UploadFile = File(...),
-        after_image:UploadFile = File(...)):
-    before_img = Image.open(BytesIO(await before_image.read()))
-    after_img = Image.open(BytesIO(await after_image.read()))
-    before_results = model_predict(before_img)
-    after_results = model_predict(after_img)
-    before_nutrients = calculate_nutrients(before_results)
-    after_nutrients = calculate_nutrients(after_results)
+        after_image:UploadFile = File(...)
+):
+    before_img: Image = Image.open(BytesIO(await before_image.read()))
+    after_img: Image = Image.open(BytesIO(await after_image.read()))
+    before_results: list[dict] = model_predict(before_img)
+    after_results: list[dict] = model_predict(after_img)
+    before_nutrients: list[dict] = calculate_nutrients(before_results)
+    after_nutrients: list[dict] = calculate_nutrients(after_results)
     consume = sum([nutrient['calories'] for nutrient in before_nutrients]) - sum([nutrient['calories'] for nutrient in after_nutrients])
     return {
             "before": calculate_nutrients(before_results), 
