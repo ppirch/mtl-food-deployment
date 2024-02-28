@@ -9,7 +9,7 @@ import torchvision.transforms as T
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
-from foodnet import SharedNet
+from foodnet import ConcatNet
 from food_utilis import food_map
 
 def img_transforms(img):
@@ -65,7 +65,7 @@ UPLOAD_DIR = os.path.join(BASE_DIR, "static")
 backbone = "resnet50"
 n_classes = 39
 segment_model = torch.hub.load("ultralytics/yolov5", 'custom',  path="./model/yolo-model.pt")
-predict_model = SharedNet(backbone=backbone, n_classes=n_classes)
+predict_model = ConcatNet(backbone=backbone, n_classes=n_classes)
 predict_model.load_state_dict(torch.load("./model/mtl-model.pt", map_location=torch.device('cpu')))
 predict_model.eval()
 
