@@ -57,9 +57,9 @@ def model_predict(img):
         label = crop['label'].split()[0]
         print(label)
         if label.startswith("hospfood"):
-            food_type, num = label.split("hospfood")
+            num = label.replace("hospfood", "")
             num = int(num) + 1
-            label = f"{food_type}{num:03d}"
+            label = f"hospfood{num:03d}"
         print(label)
         results.append({"regression": reg_outs, "classification": food_map[label]})
     return results
