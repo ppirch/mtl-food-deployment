@@ -63,10 +63,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE_DIR, "static")
 
 backbone = "resnet50"
-n_classes = 5
+n_classes = 39
 segment_model = torch.hub.load("ultralytics/yolov5", 'custom',  path="./model/yolo-model.pt")
 predict_model = SharedNet(backbone=backbone, n_classes=n_classes)
-predict_model.load_state_dict(torch.load("./model/mtl-model.pt"))
+predict_model.load_state_dict(torch.load("./model/mtl-model.pt"),  map_location=torch.device('cpu'))
 predict_model.eval()
 
 app = FastAPI()
