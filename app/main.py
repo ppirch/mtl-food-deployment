@@ -66,7 +66,7 @@ backbone = "resnet50"
 n_classes = 39
 segment_model = torch.hub.load("ultralytics/yolov5", 'custom',  path="./model/yolo-model.pt")
 predict_model = SharedNet(backbone=backbone, n_classes=n_classes)
-predict_model.load_state_dict(torch.load("./model/mtl-model.pt"),  map_location=torch.device('cpu'))
+predict_model.load_state_dict(torch.load("./model/mtl-model.pt", map_location=torch.device('cpu')))
 predict_model.eval()
 
 app = FastAPI()
