@@ -8,3 +8,7 @@ services:
       - ./api:/api
     ports:
       - "8765:8765"
+  mtl-food-web:
+    build: ./web
+    ports:
+      - '5678:80'
