@@ -15,7 +15,9 @@ export const UploadImage = () => {
   }
   return (
     <Box>
-      <h1>Upload Images</h1>
+      <Typography variant="h4">
+        Upload Images
+      </Typography>
       <Typography>
         Before eating
       </Typography>
